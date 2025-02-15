@@ -34,6 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     function getVideosFromInput(input) {
+
+        if (!input || typeof input !== "string") {
+            console.error("Invalid input:", input);
+            return { videoList: [], displayText: "" };
+        }
+
         const words = input.toLowerCase().trim().split(/\s+/); // ✅ Split on spaces
         const videoList = [];
         let displayText = "";

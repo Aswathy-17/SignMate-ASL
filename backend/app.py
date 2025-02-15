@@ -17,7 +17,7 @@ def home():
 @app.route('/api/transcribe', methods=['POST'])
 def upload():
     if "audioFile" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
+        return jsonify({"error": "No file uploaded", "transcription": ""}), 400
 
     file = request.files["audioFile"]
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
@@ -30,7 +30,7 @@ def upload():
 
         return jsonify({"transcription": transcription, "words": words}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e), "transcription": ""}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
