@@ -3,27 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech to Sign Language</title>
+    <title>SignMate</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Speech to Sign Language</h1>
-    <form id="uploadForm">
-        <input type="file" id="audioFile" accept="audio/*" required>
-        <button type="submit">Transcribe</button>
-    </form>
-    <!-- Add Live Speech Recognition Button -->
-    <button id="liveSpeechButton">Start Live Speech</button>
-    <div id="liveOutput"></div>
-    <div id="output"></div>
-    <div id="displayText"></div>
-    <div id="videoContainer">
-        <video id="signVideo" controls autoplay muted>
-            Your browser does not support the video tag.
-        </video>
+    <header>
+        <nav>
+            <a href="asl.html">ASL</a>
+            <a href="isl.html">ISL</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Welcome to SignMate</h2>
+        <p>
+            SignMate is a platform that translates speech and text into sign language.
+            Choose between <strong>American Sign Language (ASL)</strong> and <strong>Indian Sign Language (ISL)</strong>
+            to get started.
+        </p>
     </div>
-
-    <script src="src/main.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>

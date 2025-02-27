@@ -17,6 +17,8 @@ app.use(express.json());  // Parse JSON requests
 const videoFolderPath = path.join(__dirname, "assets/videos");
 const outputFolderPath = path.join(__dirname, "output");
 
+
+
 app.use("/output", express.static(outputFolderPath));
 
 
@@ -44,7 +46,7 @@ app.post("/delete", (req, res) => {
 
 // Endpoint to stitch videos using FFmpeg
 app.post("/stitch", (req, res) => {
-    const videos = req.body.videos;
+    const { videos, language } = req.body; // Add language to the request body
 
     // Check if videos array is empty or missing
     if (!videos || !Array.isArray(videos) || videos.length === 0) {
@@ -52,35 +54,50 @@ app.post("/stitch", (req, res) => {
     }
 
     console.log("Received videos for stitching:", videos);
-
-    const fullVideoPaths = videos.map(video => path.join(videoFolderPath, path.basename(video)));
-
-    fullVideoPaths.forEach(videoPath => {
-        if (!fs.existsSync(videoPath)) {
-            console.error(`Error: Video file not found: ${videoPath}`);
-            return res.status(400).json({ error: `Video file not found: ${videoPath}` });
-        }
-    });
+    console.log("Selected language:", language);
 
 
+    // Create a temporary file to store the video list for FFmpeg
     const videoListPath = path.join(__dirname, "videoList.txt");
     fs.writeFileSync(videoListPath, videos.map(video => `file '${video}'`).join('\n'));
 
+    const languageFolderPath = path.join(videoFolderPath, language);
+
+    const fullVideoPaths = videos.map(video => path.join(languageFolderPath, path.basename(video)));
+
+    // Check if all video files exist
+    const missingVideos = fullVideoPaths.filter(videoPath => !fs.existsSync(videoPath));
+    if (missingVideos.length > 0) {
+        console.error("Missing video files:", missingVideos);
+        return res.status(400).json({ error: "Missing video files", missingVideos });
+    }
+
+
     const outputDir = path.join(__dirname, "output");
     const timestamp = Date.now();
+    const outputVideoPath = path.join(outputDir, `stitched_${timestamp}.mp4`);
 
+    // Ensure the output directory exists
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir);
     }
 
-    const outputVideoPath = path.join(outputDir, `stitched_${Date.now()}.mp4`);
+    // Delete the existing output video if it exists
+    if (fs.existsSync(outputVideoPath)) {
+        fs.unlinkSync(outputVideoPath);
+    }
 
+    // Example command (make sure FFmpeg is installed and in your PATH)
     const command = `ffmpeg -f concat -safe 0 -i ${videoListPath} -c copy -preset ultrafast ${outputVideoPath}`;
     console.log("Executing command:", command);
 
-    exec(command, (error) => {
-        fs.unlinkSync(videoListPath); // Clean up the file list
 
+    exec(command, (error) => {
+
+        // Clean up the video list file after FFmpeg has finished
+        if (fs.existsSync(videoListPath)) {
+            fs.unlinkSync(videoListPath);
+        }
 
         if (error) {
             console.error(`Error stitching videos: ${error.message}`);

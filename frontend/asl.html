@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASL - SignMate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>American Sign Language (ASL)</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="isl.html">ISL</a>
+        </nav>
+    </header>
+    <div class="container">
+
+        <div class="text-input-container">
+            <input type="text" id="textInput" placeholder="Enter text here">
+            <button id="translateTextButton">Translate Text</button>
+        </div>
+
+        <form id="uploadForm">
+            <label for="audioFile" class="custom-file-upload">
+                Choose Audio File
+            </label>
+            <input type="file" id="audioFile" accept="audio/*" required>
+            <button type="submit">Transcribe</button>
+        </form>
+        
+        <button id="liveSpeechButton">Start Live Speech</button>
+        <div id="liveOutput"></div>
+        <div id="output"></div>
+        <div id="displayText"></div>
+        <div id="videoContainer">
+            <video id="signVideo" controls autoplay muted>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script src="src/main.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

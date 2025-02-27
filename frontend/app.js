@@ -12,8 +12,16 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
-        // Call the function to send transcribed text to sign language translation
-        translateToSign(data.transcription);
+        document.getElementById("output").innerHTML = `<h3>Transcription:</h3><p>${data.transcription}</p>`;
+
+            // Get the selected language (ASL or ISL)
+            const language = window.location.pathname.includes("asl") ? "asl" : "isl";
+
+            // Call the function to send transcribed text to sign language translation
+            translateToSign(data.transcription, language);
+
+            alert("Audio uploaded successfully!");
+
 
     } catch (error) {
         console.error("Error:", error);
@@ -21,30 +29,24 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
 });
 
 // Define the function to send text to the sign language module
-async function translateToSign(transcribedText) {
-
-    if (!transcribedText || typeof transcribedText !== "string") {
-        console.error("Invalid or empty transcription:", transcribedText);
-        return;
-    }
-
-
+async function translateToSign(input, language) {
     try {
-        // Convert text into an array of video paths (words & letters)
-        const { videoList, displayText } = window.getVideosFromInput(transcribedText);
+        const { videoList, displayText } = getVideosFromInput(input, language); // Pass language
 
         if (videoList.length === 0) {
-            console.error("No matching videos found for input:", transcribedText);
+            console.error("No matching videos found for input:", input);
             return;
         }
 
+        // Display the formatted text
         document.getElementById("displayText").innerText = displayText;
 
-        // Send video paths to the backend for stitching
+
+        // Send video paths and language to the backend for stitching
         const response = await fetch('http://127.0.0.1:3000/stitch', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ videos: videoList })  // Ensuring array format
+            body: JSON.stringify({ videos: videoList, language }), // Include language
         });
 
         // Log the response before parsing
@@ -57,8 +59,12 @@ async function translateToSign(transcribedText) {
         if (data.url) {
             const videoElement = document.getElementById("signVideo");
             videoElement.src = data.url;
-            videoElement.load();
-            videoElement.play();
+
+            // Force the video element to load the new source
+            videoElement.load(); // Load the new video source
+            videoElement.play(); // Play the new video
+
+            // Update the last video URL
         } else {
             console.error("No video URL returned from the server.");
             alert("Failed to generate sign language video. Please try again.");
@@ -67,6 +73,23 @@ async function translateToSign(transcribedText) {
         console.error("Error translating to sign:", error);
     }
 }
+
+// Handle manual text input
+document.getElementById("translateTextButton").addEventListener("click", () => {
+    const textInput = document.getElementById("textInput").value.trim();
+
+    if (!textInput) {
+        alert("Please enter some text.");
+        return;
+    }
+
+    // Get the selected language (ASL or ISL)
+    const language = window.location.pathname.includes("asl") ? "asl" : "isl";
+
+    // Call the function to send entered text to sign language translation
+    translateToSign(textInput, language);
+});
+
 
 // Live Speech Recognition
 let isListening = false;
@@ -99,6 +122,11 @@ document.getElementById("liveSpeechButton").addEventListener("click", () => {
         }
         document.getElementById("liveOutput").innerHTML = `<h3>Live Transcription:</h3><p>${transcript}</p>`;
         translateToSign(transcript);
+
+        const language = window.location.pathname.includes("asl") ? "asl" : "isl";
+
+        translateToSign(transcript, language);
+
     };
 
     recognition.onerror = (event) => {

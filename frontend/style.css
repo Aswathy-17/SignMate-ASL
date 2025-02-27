@@ -1,36 +1,159 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-}
-
-h1 {
-    margin-top: 20px;
-    font-size: 24px;
+    background-image: url('assets/ASL-cover-image.webp'); /* Add your background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.translator-container {
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 400px;
-    background: white;
-    border-radius: 8px;
+/* Container for the content */
+.container {
+    background: rgba(255, 255, 255, 0.488); /* Semi-transparent white background */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Header */
+header {
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin: 0;
+    color: rgb(39, 36, 36);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Styling */
+#uploadForm {
+    margin-bottom: 20px;
+}
+
+#audioFile {
+    display: none; /* Hide the default file input */
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background: #003f83;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    background: #28a745; /* Green color for buttons */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 5px;
+}
+
+button:hover {
+    background: #0d5a1d; /* Darker green on hover */
+}
+
+#liveSpeechButton {
+    background: #dc3545; /* Red color for live speech button */
+}
+
+#liveSpeechButton:hover {
+    background: #96111e; /* Darker red on hover */
+}
+
+/* Output Sections */
+#output, #liveOutput {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #444;
+}
+
+#displayText {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #007bff;
+}
+
+/* Video Container */
+#videoContainer {
+    margin-top: 20px;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-input[type="text"] {
-    width: 80%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
 }
 
-button {
+#languageSelect {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: white;
+    margin-left: 20px;
+}
+
+.text-input-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+#textInput {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex: 1;
+}
+
+#translateTextButton {
     padding: 10px 20px;
     background: #007bff;
     color: white;
@@ -40,24 +163,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+#translateTextButton:hover {
     background: #0056b3;
-}
-
-.display-text {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
-    color: #444;
-}
-
-#videoContainer {
-    margin-top: 20px;
-}
-
-video {
-    width: 50%;
-    max-width: 600px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
